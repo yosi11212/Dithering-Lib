@@ -7,6 +7,9 @@
 	"mixins": [],
 	"client": [
 		"ShaderCreatorMixin",
+		"TransformPatcherMixin",
+		"ShaderSynthesizerMixin",
+		"ExtendedShaderMixin",
 		"FallbackShaderMixin",
 		"IrisRenderingPipelineMixin",
 		"GlRenderPipelineMixin",

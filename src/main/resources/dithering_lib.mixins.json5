@@ -11,7 +11,11 @@
 		"render.RenderTypeMixin",
 		"shader.GlDeviceMixin",
 		"render.SubmitNodeStorageMixin",
-		"render.FeatureRenderDispatcherMixin",
+		//? if >=26.2 {
+		"render.FeatureRenderDispatcher262Mixin",
+		//?} else {
+		/*"render.FeatureRenderDispatcher261Mixin",
+		*///?}
 		"debug.EntityRenderDispatcherMixin",
 		"debug.LevelRendererMixin",
 		"render.SubmitNodeCollectionMixin",

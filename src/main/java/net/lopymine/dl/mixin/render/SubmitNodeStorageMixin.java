@@ -1,5 +1,9 @@
 package net.lopymine.dl.mixin.render;
 
+//? if >=26.2 {
+import net.minecraft.client.renderer.feature.phase.FeatureRenderPhase;
+import java.util.function.Consumer;
+//?}
 import net.lopymine.dl.client.DitheringLibClient;
 import net.lopymine.dl.dithering.*;
 import net.lopymine.dl.thing.RenderingMarker;
@@ -34,13 +38,22 @@ public class SubmitNodeStorageMixin implements DitheringMarker {
 		cir.setReturnValue(submitNodeCollection);
 	}
 
-	@Inject(at = @At("HEAD"), method = "endFrame")
-	private void endFrameDitheringStorage(CallbackInfo ci) {
+	//? if >=26.2 {
+	@Inject(at = @At("HEAD"), method = "drainPhases")
+	private void endFrameDitheringStorage(Consumer<FeatureRenderPhase<?>> consumer, CallbackInfo ci) {
 		if (this.ditheringStorage || this.ditheringLib$storage == null) {
 			return;
 		}
-		this.ditheringLib$storage.endFrame();
+		this.ditheringLib$storage.drainPhases(consumer);
 	}
+	//?} else {
+	/*@Inject(at = @At("HEAD"), method = "endFrame")
+		private void endFrameDitheringStorage(CallbackInfo ci) {
+			if (this.ditheringStorage || this.ditheringLib$storage == null) {
+				return;
+			}
+			this.ditheringLib$storage.endFrame();
+		}
 
 	@Inject(at = @At("HEAD"), method = "clear")
 	private void clearDitheringStorage(CallbackInfo ci) {
@@ -49,6 +62,7 @@ public class SubmitNodeStorageMixin implements DitheringMarker {
 		}
 		this.ditheringLib$storage.clear();
 	}
+	*///?}
 
 	@Override
 	public void ditheringLib$setDithering(boolean bl) {

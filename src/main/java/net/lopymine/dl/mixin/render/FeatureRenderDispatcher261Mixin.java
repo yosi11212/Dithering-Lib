@@ -1,6 +1,8 @@
 package net.lopymine.dl.mixin.render;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.*;
+//? if <=26.1 {
+
+/*import com.llamalad7.mixinextras.injector.wrapoperation.*;
 import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
 import java.util.Iterator;
 import net.lopymine.dl.client.DitheringLibClient;
@@ -16,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(FeatureRenderDispatcher.class)
-public abstract class FeatureRenderDispatcherMixin {
+public abstract class FeatureRenderDispatcher261Mixin {
 
 	@Unique
 	private boolean ditheringTranslucentRendering;
@@ -30,12 +32,16 @@ public abstract class FeatureRenderDispatcherMixin {
 	@Shadow
 	public abstract void renderSolidFeatures();
 	//?} else {
-	/*@Shadow public abstract void renderAllFeatures();
-	*///?}
+	/^@Shadow public abstract void renderAllFeatures();
+	 ^///?}
 
-	@Shadow @Final private BufferSource bufferSource;
+	@Shadow
+	@Final
+	private BufferSource bufferSource;
 
-	@Shadow @Final private SubmitNodeStorage submitNodeStorage;
+	@Shadow
+	@Final
+	private SubmitNodeStorage submitNodeStorage;
 
 	@WrapOperation(
 			at = @At(
@@ -45,8 +51,8 @@ public abstract class FeatureRenderDispatcherMixin {
 			//? if >=26.1 {
 			method = {"renderSolidFeatures", "renderTranslucentFeatures"}
 			//?} else {
-			/*method = {"renderAllFeatures"}
-			*///?}
+			/^method = {"renderAllFeatures"}
+			^///?}
 	)
 	private Object pushData(Iterator<?> instance, Operation<Object> original) {
 		if (!this.isDitheringRendering()) {
@@ -109,7 +115,7 @@ public abstract class FeatureRenderDispatcherMixin {
 		RenderingMarker.API_DITHERING_RENDERING.get().setEnabled(false);
 	}
 	//?} else {
-	/*@Inject(method = "renderAllFeatures", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeStorage;clear()V"))
+	/^@Inject(method = "renderAllFeatures", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeStorage;clear()V"))
 		private void renderSolidAgainButDithering(CallbackInfo ci) {
 			if (!DitheringLibClient.isEnabled()) {
 				return;
@@ -131,7 +137,7 @@ public abstract class FeatureRenderDispatcherMixin {
 			this.ditheringTranslucentRendering = false;
 			RenderingMarker.API_DITHERING_RENDERING.get().setEnabled(false);
 		}
-	*///?}
+	^///?}
 
 	@WrapOperation(
 			at = @At(
@@ -140,8 +146,8 @@ public abstract class FeatureRenderDispatcherMixin {
 			//? if >=26.1 {
 			method = {"renderSolidFeatures", "renderTranslucentFeatures"}
 			//?} else {
-			/*method = {"renderAllFeatures"}
-			*///?}
+			/^method = {"renderAllFeatures"}
+			^///?}
 	)
 	private Int2ObjectAVLTreeMap<SubmitNodeCollection> swapToDitheringModelSet(SubmitNodeStorage instance, Operation<Int2ObjectAVLTreeMap<SubmitNodeCollection>> original) {
 		if (!this.isDitheringRendering()) {
@@ -156,3 +162,4 @@ public abstract class FeatureRenderDispatcherMixin {
 	}
 
 }
+*///?}

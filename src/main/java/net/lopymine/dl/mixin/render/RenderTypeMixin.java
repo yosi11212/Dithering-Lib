@@ -9,13 +9,17 @@ import net.lopymine.dl.compat.IrisAPI;
 import net.lopymine.dl.dithering.vanilla.*;
 import net.lopymine.dl.thing.RenderingMarker;
 import net.lopymine.dl.utils.IrisDitheringMarker;
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.*;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(RenderType.class)
+//? if >=26.2 {
+@Mixin(PreparedRenderType.class)
+//?} else {
+/*@Mixin(RenderType.class)
+ *///?}
 public class RenderTypeMixin {
 
 	@Unique
@@ -27,7 +31,17 @@ public class RenderTypeMixin {
 	@Nullable
 	private RenderPipeline ditheringLib$lastDitheringRenderPipeline = null;
 
-	@WrapOperation(at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderPass;setPipeline(Lcom/mojang/blaze3d/pipeline/RenderPipeline;)V"), method = "draw")
+	@WrapOperation(
+			at = @At(
+					value = "INVOKE",
+					target = "Lcom/mojang/blaze3d/systems/RenderPass;setPipeline(Lcom/mojang/blaze3d/pipeline/RenderPipeline;)V"
+			),
+			//? if >=26.2 {
+			method = "drawFromBuffer(Lcom/mojang/blaze3d/buffers/GpuBuffer;Lcom/mojang/blaze3d/buffers/GpuBuffer;Lcom/mojang/blaze3d/IndexType;III)V"
+			//?} else {
+			/*method = "draw"
+			*///?}
+	)
 	private void swapRenderPipeline(RenderPass instance, RenderPipeline pipeline, Operation<Void> original) {
 		boolean bl = IrisAPI.isShaderPackInUse();
 		boolean ditheringEnabled = RenderingMarker.API_DITHERING_RENDERING.get().isEnabled();
@@ -65,8 +79,12 @@ public class RenderTypeMixin {
 					value = "INVOKE",
 					target = "Lcom/mojang/blaze3d/systems/RenderPass;setUniform(Ljava/lang/String;Lcom/mojang/blaze3d/buffers/GpuBufferSlice;)V"
 			),
-			method = "draw"
-	)
+			//? if >=26.2 {
+			method = "drawFromBuffer(Lcom/mojang/blaze3d/buffers/GpuBuffer;Lcom/mojang/blaze3d/buffers/GpuBuffer;Lcom/mojang/blaze3d/IndexType;III)V"
+			//?} else {
+			/*method = "draw"
+			 *///?}
+	 	)
 	private void bindDitheringDataUniform(CallbackInfo ci, @Local RenderPass pass) {
 		if (!DitheringLibClient.isEnabled()) {
 			return;

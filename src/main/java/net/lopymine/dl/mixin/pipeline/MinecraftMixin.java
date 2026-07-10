@@ -9,9 +9,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = Minecraft.class, priority = 2042)
 public class MinecraftMixin {
 
-	@Inject(at = @At("HEAD"), method = "onGameLoadFinished(Lnet/minecraft/client/Minecraft$GameLoadCookie;)V")
+	//? if >=26.2 {
+	@Inject(at = @At("HEAD"), method = "onGameLoadFinished")
 	private void registerPipelines(CallbackInfo ci) {
 		DitheringRenderPipelineManager.registerAndClear();
 	}
+	//?} else {
+		/*@Inject(at = @At("HEAD"), method = "onGameLoadFinished(Lnet/minecraft/client/Minecraft$GameLoadCookie;)V")
+		private void registerPipelines(CallbackInfo ci) {
+			DitheringRenderPipelineManager.registerAndClear();
+		}
+	*///?}
 
 }
