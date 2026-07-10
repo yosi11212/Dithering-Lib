@@ -1,1 +1,2 @@
-- Fixed custom RenderPipeline registration
+- Ported to 26.2
+- Better Iris compatibility
