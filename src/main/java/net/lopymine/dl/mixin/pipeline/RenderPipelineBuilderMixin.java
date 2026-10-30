@@ -28,7 +28,23 @@ import org.spongepowered.asm.mixin.injection.callback.*;
 @Mixin(RenderPipeline.Builder.class)
 public abstract class RenderPipelineBuilderMixin implements BuilderCopyDithering {
 
-	//? if >=26.2 {
+	//? if >=26.3 {
+	/*@Shadow private Optional<Identifier> location;
+	@Shadow @Final private Map<ShaderType, Identifier> shaders;
+	@Shadow private Optional<ShaderDefines.Builder> definesBuilder;
+	@Shadow private Optional<Set<BindGroupLayout>> bindGroupLayouts;
+	@Shadow public abstract Builder withBindGroupLayout(BindGroupLayout bindGroupLayout);
+	@Shadow private Optional<PolygonMode> polygonMode;
+	@Shadow private Optional<Boolean> cull;
+	@Shadow private Optional<DepthStencilState> depthStencilState;
+	@Mutable
+	@Shadow @Final private @Nullable ColorTargetState[] colorTargetStates;
+	@Shadow private int activeColorTargetStateCount;
+	@Mutable
+	@Shadow @Final private @Nullable VertexFormat[] vertexFormatPerBuffer;
+	@Shadow private Optional<PrimitiveTopology> primitiveTopology;
+	@Shadow private int pushConstantSize;
+	*///?} elif >=26.2 {
 	@Shadow private Optional<Identifier> location;
 	@Shadow private Optional<Identifier> fragmentShader;
 	@Shadow private Optional<Identifier> vertexShader;
@@ -127,9 +143,24 @@ public abstract class RenderPipelineBuilderMixin implements BuilderCopyDithering
 		RenderPipelineBuilderAccessor accessor = (RenderPipelineBuilderAccessor) builder;
 
 		this.location = accessor.getLocation().map((id) -> DitheringLib.id("%s/%s/dithering".formatted(id.getNamespace(), id.getPath())));
-		this.fragmentShader = Optional.of(VanillaDitheringShaderManager.createDitheringShaderId(accessor.getFragmentShader().orElseThrow()));
 
-		//? if >=26.2 {
+		//? if >=26.3 {
+		/*this.shaders.putAll(accessor.getShaders());
+		this.shaders.put(ShaderType.FRAGMENT, VanillaDitheringShaderManager.createDitheringShaderId(Objects.requireNonNull(accessor.getShaders().get(ShaderType.FRAGMENT))));
+		this.definesBuilder   = accessor.getDefinesBuilder();
+		this.bindGroupLayouts = accessor.getBindGroupLayouts().map(HashSet::new);
+		this.withBindGroupLayout(BindGroupLayout.builder().withUniform("DitheringLibData", UniformType.UNIFORM_BUFFER).build());
+
+		this.depthStencilState = accessor.getDepthStencilState();
+		this.polygonMode = accessor.getPolygonMode();
+		this.cull = accessor.getCull();
+		this.colorTargetStates = accessor.getColorTargetStates();
+		this.activeColorTargetStateCount = accessor.getActiveColorTargetStateCount();
+		this.vertexFormatPerBuffer = accessor.getVertexFormatPerBuffer();
+		this.primitiveTopology = accessor.getPrimitiveTopology();
+		this.pushConstantSize = accessor.getPushConstantSize();
+		*///?} elif >=26.2 {
+		this.fragmentShader   = Optional.of(VanillaDitheringShaderManager.createDitheringShaderId(accessor.getFragmentShader().orElseThrow()));
 		this.vertexShader     = accessor.getVertexShader();
 		this.definesBuilder   = accessor.getDefinesBuilder();
 		this.bindGroupLayouts = accessor.getBindGroupLayouts().map(ArrayList::new);
@@ -143,7 +174,8 @@ public abstract class RenderPipelineBuilderMixin implements BuilderCopyDithering
 		this.vertexFormatPerBuffer = accessor.getVertexFormatPerBuffer();
 		this.primitiveTopology = accessor.getPrimitiveTopology();
 		//?} elif >=26.1 {
-		/*this.vertexShader = accessor.getVertexShader();
+		/*this.fragmentShader = Optional.of(VanillaDitheringShaderManager.createDitheringShaderId(accessor.getFragmentShader().orElseThrow()));
+		this.vertexShader = accessor.getVertexShader();
 		this.definesBuilder = accessor.getDefinesBuilder();
 		this.samplers = accessor.getSamplers().map(ArrayList::new);
 		this.uniforms = accessor.getUniforms().map(ArrayList::new);
@@ -156,7 +188,8 @@ public abstract class RenderPipelineBuilderMixin implements BuilderCopyDithering
 		this.vertexFormat = accessor.getVertexFormat();
 		this.vertexFormatMode = accessor.getVertexFormatMode();
 		*///?} else {
-		/*this.vertexShader = accessor.getVertexShader();
+		/*this.fragmentShader = Optional.of(VanillaDitheringShaderManager.createDitheringShaderId(accessor.getFragmentShader().orElseThrow()));
+		this.vertexShader = accessor.getVertexShader();
 		this.definesBuilder = accessor.getDefinesBuilder();
 		this.samplers = accessor.getSamplers().map(ArrayList::new);
 		this.uniforms = accessor.getUniforms().map(ArrayList::new);

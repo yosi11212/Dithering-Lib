@@ -36,6 +36,20 @@ if (sc.current.project.contains("fabric")) {
 //}
 
 stonecutter {
+	// 26.3 moved the render pipeline API from com.mojang.blaze3d to com.mojang.renderpearl
+	replacements.string(current.parsed >= "26.3") {
+		replace("com.mojang.blaze3d.PrimitiveTopology", "com.mojang.renderpearl.api.pipeline.PrimitiveTopology")
+		replace("com.mojang.blaze3d.opengl.", "com.mojang.renderpearl.backend.opengl.")
+		replace("com.mojang.blaze3d.pipeline.RenderPipeline", "com.mojang.renderpearl.api.pipeline.RenderPipeline")
+		replace("import com.mojang.blaze3d.pipeline.*;", "import com.mojang.renderpearl.api.pipeline.*;")
+		replace("com.mojang.blaze3d.shaders.ShaderSource", "com.mojang.renderpearl.api.pipeline.ShaderSource")
+		replace("com.mojang.blaze3d.shaders.ShaderType", "com.mojang.renderpearl.api.pipeline.ShaderType")
+		replace("com.mojang.blaze3d.shaders.UniformType", "com.mojang.renderpearl.api.pipeline.UniformType")
+		replace("com.mojang.blaze3d.systems.RenderPass", "com.mojang.renderpearl.api.commands.RenderPass")
+		replace("com.mojang.blaze3d.vertex.VertexFormat", "com.mojang.renderpearl.api.vertex.VertexFormat")
+		replace("net.minecraft.client.renderer.state.CameraRenderState", "net.minecraft.client.renderer.state.level.CameraRenderState")
+	}
+
 	replacements.string(current.parsed >= "26.1") {
 		replace("net.minecraft.client.gui.GuiGraphics", "net.minecraft.client.gui.GuiGraphicsExtractor")
 		replace("GuiGraphics", "GuiGraphicsExtractor")

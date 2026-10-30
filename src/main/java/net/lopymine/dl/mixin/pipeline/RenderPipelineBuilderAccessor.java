@@ -19,7 +19,44 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(RenderPipeline.Builder.class)
 public interface RenderPipelineBuilderAccessor {
 
-	//? if >=26.2 {
+	//? if >=26.3 {
+	/*@Accessor("location")
+	Optional<Identifier> getLocation();
+
+	@Accessor("shaders")
+	Map<ShaderType, Identifier> getShaders();
+
+	@Accessor("definesBuilder")
+	Optional<ShaderDefines.Builder> getDefinesBuilder();
+
+	@Accessor("bindGroupLayouts")
+	Optional<Set<BindGroupLayout>> getBindGroupLayouts();
+
+	@Accessor("depthStencilState")
+	Optional<DepthStencilState> getDepthStencilState();
+
+	@Accessor("polygonMode")
+	Optional<PolygonMode> getPolygonMode();
+
+	@Accessor("cull")
+	Optional<Boolean> getCull();
+
+	@Accessor("colorTargetStates")
+	ColorTargetState[] getColorTargetStates();
+
+	@Accessor("activeColorTargetStateCount")
+	int getActiveColorTargetStateCount();
+
+	@Accessor("vertexFormatPerBuffer")
+	VertexFormat[] getVertexFormatPerBuffer();
+
+	@Accessor("primitiveTopology")
+	Optional<PrimitiveTopology> getPrimitiveTopology();
+
+	@Accessor("pushConstantSize")
+	int getPushConstantSize();
+
+	*///?} elif >=26.2 {
 	@Accessor("location")
 	Optional<Identifier> getLocation();
 
